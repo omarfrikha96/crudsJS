@@ -20,7 +20,7 @@ let category = document.querySelector('#category');
 let count = document.querySelector('#count');
 let submit = document.querySelector('#submit');
 let mood = 'create';    // update
-let tmp ;
+let tmp ;  // update
 
 // get total
 function getTotal(){
