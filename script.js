@@ -10,7 +10,7 @@
 // clean data
 
 
-let tile = document.querySelector('#title');
+let title = document.querySelector('#title');
 let price = document.querySelector('#price');
 let taxes = document.querySelector('#taxes');
 let ads = document.querySelector('#ads');
@@ -30,4 +30,27 @@ if (price.value !=""){
     total.innerHTML = '';
     total.style.backgroundColor = '#b10505'
 }
+}
+
+// create product 
+let dataPro;
+if (localStorage.product != null) {
+    dataPro = JSON.parse(localStorage.product)  
+}else {
+    dataPro = [];
+}
+
+submit.onclick = function(){
+    let newPro= {
+        title : title.value,
+        price : price.value,
+        taxes : taxes.value,
+        ads : ads.value,
+        discount : discount.value,
+        total : total.innerHTML,
+        count : count.value,
+        category : category.value
+    }
+    dataPro.push(newPro);
+    localStorage.setItem('product', JSON.stringify(dataPro));
 }
