@@ -52,5 +52,7 @@ submit.onclick = function(){
         category : category.value
     }
     dataPro.push(newPro);
+    // save localstorage
     localStorage.setItem('product', JSON.stringify(dataPro));
 }
+
