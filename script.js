@@ -19,6 +19,8 @@ let total = document.querySelector('#total');
 let category = document.querySelector('#category');
 let count = document.querySelector('#count');
 let submit = document.querySelector('#submit');
+let mood = 'create';    // update
+let tmp ;
 
 // get total
 function getTotal(){
@@ -52,14 +54,23 @@ submit.onclick = function(){
         category : category.value
     }
     
-    if (newPro.count > 1) {           //count
-        for (let i = 0; i < newPro.count; i++) {
-            dataPro.push(newPro);
-            
-        }
-    }else {
-         dataPro.push(newPro);
-    }         //////
+    if (mood === 'create') {    //update
+        if (newPro.count > 1) {           //count
+            for (let i = 0; i < newPro.count; i++) {
+                dataPro.push(newPro);
+                
+            }
+        }else {
+             dataPro.push(newPro);
+        }         //////count
+    }else {       //update
+        dataPro[tmp]  = newPro;
+        mood = 'create';
+        submit.innerHTML = 'Create';
+        count.style.display = 'block'
+    }
+
+    
 
     // save localstorage
     localStorage.setItem('product', JSON.stringify(dataPro));
@@ -81,6 +92,7 @@ total.innerHTML = '';
 
 // read
 function showData(){
+    getTotal()   // update
     let table = '';
     for (let i = 0; i < dataPro.length; i++) {
         table += `
@@ -93,7 +105,7 @@ function showData(){
             <td>${dataPro[i].discount}</td>
             <td>${dataPro[i].total}</td>
             <td>${dataPro[i].category}</td>
-            <td><button id="update">update</button></td>
+            <td><button onclick="updateData(${i})" id="update">update</button></td>
             <td><button onclick="deleteData(${i})" id="delete">delete</button></td>
          </tr>
         `       
@@ -125,3 +137,21 @@ function deleteAll() {
     showData()
 }
 
+// update
+function updateData(i){
+    title.value = dataPro[i].title;
+    price.value = dataPro[i].price;
+    taxes.value = dataPro[i].taxes;
+    ads.value = dataPro[i].ads;
+    discount.value = dataPro[i].discount;
+    getTotal();
+    count.style.display = 'none';
+    category.value = dataPro[i].category;
+    submit.innerHTML = 'Update';
+    mood = 'update';
+    tmp = i;
+    scroll({
+        top : 0,
+        behavior : 'smooth'
+    })     //scroll to top 
+}
