@@ -53,27 +53,31 @@ submit.onclick = function () {
     category: category.value.toLowerCase(),
   };
 
-  if (mood === "create") {
-    //update
-    if (newPro.count > 1) {
-      //count
-      for (let i = 0; i < newPro.count; i++) {
+  if (title.value != "" && price.value != "" && category.value) {
+    // clean data
+    if (mood === "create") {
+      //update
+      if (newPro.count > 1) {
+        //count
+        for (let i = 0; i < newPro.count; i++) {
+          dataPro.push(newPro);
+        }
+      } else {
         dataPro.push(newPro);
-      }
+      } //////count
     } else {
-      dataPro.push(newPro);
-    } //////count
-  } else {
-    //update
-    dataPro[tmp] = newPro;
-    mood = "create";
-    submit.innerHTML = "Create";
-    count.style.display = "block";
+      //update
+      dataPro[tmp] = newPro;
+      mood = "create";
+      submit.innerHTML = "Create";
+      count.style.display = "block";
+    }
+    clearData();
   }
 
   // save localstorage
   localStorage.setItem("product", JSON.stringify(dataPro));
-  clearData();
+
   showData(); // read
 };
 
@@ -96,7 +100,7 @@ function showData() {
   for (let i = 0; i < dataPro.length; i++) {
     table += `
         <tr>
-            <td>${i}</td>
+            <td>${i + 1}</td>
             <td>${dataPro[i].title}</td>
             <td>${dataPro[i].price}</td>
             <td>${dataPro[i].taxes}</td>
@@ -168,33 +172,16 @@ function getSearchMood(id) {
   search.placeholder = "Search by " + searchMood;
 
   search.focus(); // when user click btn focus on search bar
-  search.value = '';   // search
-  showData();   // search
+  search.value = ""; // search
+  showData(); // search
 }
 
 function searchData(value) {
-    let table = "";
-    for (let i = 0; i < dataPro.length; i++) {
-      if (searchMood == "title") {  
-          if (dataPro[i].title.includes(value.toLowerCase())) {
-              table += `
-                          <tr>
-                              <td>${i}</td>
-                              <td>${dataPro[i].title}</td>
-                              <td>${dataPro[i].price}</td>
-                              <td>${dataPro[i].taxes}</td>
-                              <td>${dataPro[i].ads}</td>
-                              <td>${dataPro[i].discount}</td>
-                              <td>${dataPro[i].total}</td>
-                              <td>${dataPro[i].category}</td>
-                              <td><button onclick="updateData(${i})" id="update">update</button></td>
-                              <td><button onclick="deleteData(${i})" id="delete">delete</button></td>
-                          </tr>
-                          `;       
-          }      
-      } else {
-          if (dataPro[i].category.includes(value.toLowerCase())) {
-              table += `
+  let table = "";
+  for (let i = 0; i < dataPro.length; i++) {
+    if (searchMood == "title") {
+      if (dataPro[i].title.includes(value.toLowerCase())) {
+        table += `
                           <tr>
                               <td>${i}</td>
                               <td>${dataPro[i].title}</td>
@@ -208,11 +195,26 @@ function searchData(value) {
                               <td><button onclick="deleteData(${i})" id="delete">delete</button></td>
                           </tr>
                           `;
-          }
+      }
+    } else {
+      if (dataPro[i].category.includes(value.toLowerCase())) {
+        table += `
+                          <tr>
+                              <td>${i}</td>
+                              <td>${dataPro[i].title}</td>
+                              <td>${dataPro[i].price}</td>
+                              <td>${dataPro[i].taxes}</td>
+                              <td>${dataPro[i].ads}</td>
+                              <td>${dataPro[i].discount}</td>
+                              <td>${dataPro[i].total}</td>
+                              <td>${dataPro[i].category}</td>
+                              <td><button onclick="updateData(${i})" id="update">update</button></td>
+                              <td><button onclick="deleteData(${i})" id="delete">delete</button></td>
+                          </tr>
+                          `;
       }
     }
-   
-    let tbody = (document.getElementById("tbody").innerHTML = table);
   }
 
-
+  let tbody = (document.getElementById("tbody").innerHTML = table);
+}
